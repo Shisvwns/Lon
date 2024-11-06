@@ -1,4 +1,4 @@
-return Elementlocal Creator = require("../Creator")
+local Creator = require("../Creator")
 local New = Creator.New
 
 local Element = {}
@@ -107,11 +107,17 @@ function Element:New(Config)
     
     Slider.UIElements.SliderContainer.InputBegan:Connect(function(input)
         if not Slider.IsFocusing and not HoldingSlider and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+            isTouch = (input.UserInputType == Enum.UserInputType.Touch)
             
-            Slider.SliderFrame.UIElements.Main.Parent.Parent.ScrollingEnabled = false
             HoldingSlider = true
             
             moveconnection = game:GetService("RunService").RenderStepped:Connect(function()
+                local inputPosition
+                if isTouch then
+                    inputPosition = input.Position.X
+                else
+                    inputPosition = game:GetService("UserInputService"):GetMouseLocation().X
+                end
     
                 local delta = math.clamp((inputPosition - Slider.UIElements.SliderIcon.AbsolutePosition.X) / Slider.UIElements.SliderIcon.Size.X.Offset, 0, 1)
                 Value = math.floor((Slider.Value.Min + delta * (Slider.Value.Max - Slider.Value.Min)) / Slider.Step + 0.5) * Slider.Step
@@ -129,8 +135,7 @@ function Element:New(Config)
                     moveconnection:Disconnect()
                     releaseconnection:Disconnect()
                     HoldingSlider = false
-                    
-                    Slider.SliderFrame.UIElements.Main.Parent.Parent.ScrollingEnabled = true
+
                 end
             end)
         end
