@@ -1,4 +1,4 @@
-return TabModulelocal Creator = require("../Creator")
+local Creator = require("../Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
@@ -332,34 +332,6 @@ function TabModule.New(Config)
 	
 	return Tab
 end
-
-Creator.AddSignal(ContainerLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
-		Tab.ContainerFrame.CanvasSize = UDim2.new(0, 0, 0, ContainerLayout.AbsoluteContentSize.Y + 2)
-	end)
-
-	Tab.Motor, Tab.SetTransparency = Creator.SpringMotor(1, Tab.Frame, "BackgroundTransparency")
-
-	Creator.AddSignal(Tab.Frame.MouseEnter, function()
-		Tab.SetTransparency(Tab.Selected and 0.85 or 0.89)
-	end)
-	Creator.AddSignal(Tab.Frame.MouseLeave, function()
-		Tab.SetTransparency(Tab.Selected and 0.89 or 1)
-	end)
-	Creator.AddSignal(Tab.Frame.MouseButton1Down, function()
-		Tab.SetTransparency(0.92)
-	end)
-	Creator.AddSignal(Tab.Frame.MouseButton1Up, function()
-		Tab.SetTransparency(Tab.Selected and 0.85 or 0.89)
-	end)
-	Creator.AddSignal(Tab.Frame.MouseButton1Click, function()
-		TabModule:SelectTab(TabIndex)
-	end)
-
-	TabModule.Containers[TabIndex] = Tab.ContainerFrame
-	TabModule.Tabs[TabIndex] = Tab
-
-	Tab.Container = Tab.ContainerFrame
-	Tab.ScrollFrame = Tab.Container
 
 function TabModule:SelectTab(Tab)
     local TabIndex = Tab.Index
