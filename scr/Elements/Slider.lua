@@ -106,7 +106,7 @@ function Element:New(Config)
     })
     
     Slider.UIElements.SliderContainer.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        if not Slider.IsFocusing and not HoldingSlider and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
             isTouch = (input.UserInputType == Enum.UserInputType.Touch)
             
             Slider.SliderFrame.UIElements.Main.Parent.Parent.ScrollingEnabled = false
